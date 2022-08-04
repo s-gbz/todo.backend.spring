@@ -23,8 +23,13 @@ public class TodoController {
         return todoService.getAllTodos();
     }
 
-    @PostMapping(value = "/new")
-    @PutMapping(value = "/update")
+    // Should we have separate methods to create and update entities? A tough choice for sure!
+    // I'm going for a uniform save method since this use case is rather ordinary and
+    // hasn't specified any constraints in controller response.
+    // There's also no tangible benefit in splitting the two.
+    //
+    // We do "sacrifice" not having a proper PUT verb, but we'll accept that for now.
+    @PostMapping(value = "/save")
     public String saveTodo(@RequestBody Todo todo) {
         return todoService.saveTodo(todo);
     }
