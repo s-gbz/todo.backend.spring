@@ -6,40 +6,53 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@DataMongoTest
-@ExtendWith(MockitoExtension.class)
-class TodoServiceTest {
 
+@ExtendWith(MockitoExtension.class)
+public class TodoServiceTest {
+
+    TodoService todoService;
     @Mock
     TodoRepository todoRepository;
 
-    TodoService todoService;
-
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         todoService = new TodoService(todoRepository);
     }
 
     @Test
-    void creatingATodoReturnsAnId() {
+    public void creatingATodoReturnsAnId() {
+        // Given
+        String expectedId = "aNewId";
         Todo firstTodo = new Todo("My first todo", false);
+        firstTodo.setId(expectedId);
 
-        when(todoRepository.save(any(Todo.class))).then(returnMockId())
+        when(todoRepository.save(firstTodo)).thenReturn(firstTodo);
 
+        // When
+        String savedId = todoService.saveTodo(firstTodo);
 
-
-        assertThat(todoService.saveTodo(firstTodo)).isNotNull();
+        // Then
+        assertThat(savedId).isEqualTo(expectedId);
     }
 
-    private String returnMockId() {
-        return "abMeinsc1";
+    @Test
+    public void updatingAnExistingTodoModifiesItsState() {
+        // Given
+        String expectedId = "aNewId";
+        Todo firstTodo = new Todo("My first todo", false);
+        firstTodo.setId(expectedId);
+
+        when(todoRepository.save(firstTodo)).thenReturn(firstTodo);
+
+        // When
+        String savedId = todoService.saveTodo(firstTodo);
+
+        // Then
+        assertThat(savedId).isEqualTo(expectedId);
     }
 
     @Test

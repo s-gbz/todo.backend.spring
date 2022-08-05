@@ -1,19 +1,17 @@
 package de.grilborzer.neuefische.todo.backend.persistence;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-
-@Getter
-@Setter
+@Data
 public class Todo {
 
     @Id
-    public String id;
-    public String title;
-    public boolean status;
+    private String id;
+    private String title;
+    private boolean status;
 
+    // Doesn't require ID explicitly as it's null anyway and will be handled by MongoDB
     public Todo(String title, boolean status) {
         this.title = title;
         this.status = status;

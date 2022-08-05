@@ -2,21 +2,18 @@ package de.grilborzer.neuefische.todo.backend.controller;
 
 import de.grilborzer.neuefische.todo.backend.persistence.Todo;
 import de.grilborzer.neuefische.todo.backend.service.TodoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = {"/v1/todos"})
+@RequestMapping(path = "/v1/todos")
+@RequiredArgsConstructor
 public class TodoController {
 
     private final TodoService todoService;
-
-    @Autowired
-    public TodoController(TodoService todoService) {
-        this.todoService = todoService;
-    }
 
     @GetMapping
     public List<Todo> getAllTodos() {
@@ -29,7 +26,7 @@ public class TodoController {
     // There's also no tangible benefit in splitting the two.
     //
     // We do "sacrifice" not having a proper PUT verb, but we'll accept that for now.
-    @PostMapping(value = "/save")
+    @PostMapping
     public String saveTodo(@RequestBody Todo todo) {
         return todoService.saveTodo(todo);
     }
