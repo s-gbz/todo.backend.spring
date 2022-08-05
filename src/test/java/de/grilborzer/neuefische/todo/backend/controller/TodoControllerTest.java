@@ -2,16 +2,16 @@ package de.grilborzer.neuefische.todo.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.grilborzer.neuefische.todo.backend.persistence.Todo;
+import de.grilborzer.neuefische.todo.backend.persistence.TodoRepository;
+import de.grilborzer.neuefische.todo.backend.service.TodoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = TodoController.class)
@@ -20,30 +20,30 @@ class TodoControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockBean
+    TodoService todoService;
+
+    @MockBean
+    TodoRepository todoRepository;
+
     @Test
-    void getAllTodos() throws Exception {
-        mockMvc.perform(get("/todos")
+    void getAllTodosShouldReturn200() throws Exception {
+        mockMvc.perform(get("/v1/todos")
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn();
     }
 
     @Test
-    public void createEmployeeAPI() throws Exception
-    {
-        mockMvc.perform( MockMvcRequestBuilders
-                        .post("/employees")
-                        .content(asJsonString(new Todo("My first todo", false)))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").exists());
-    }
+    void saveTodoShouldReturn200() throws Exception {
+        Todo firstTodo = new Todo("My first todo", false);
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        mockMvc.perform(post("/v1/todos")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(firstTodo))
+                )
+                .andExpect(status().isOk()).andReturn();
     }
 }
