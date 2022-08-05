@@ -3,7 +3,7 @@ package de.grilborzer.neuefische.todo.backend.controller;
 import de.grilborzer.neuefische.todo.backend.persistence.Todo;
 import de.grilborzer.neuefische.todo.backend.service.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,5 +29,11 @@ public class TodoController {
     @PostMapping
     public String saveTodo(@RequestBody Todo todo) {
         return todoService.saveTodo(todo);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity.BodyBuilder deleteTodo(@PathVariable String todoId) {
+        todoService.deleteTodo(todoId);
+        return ResponseEntity.ok();
     }
 }

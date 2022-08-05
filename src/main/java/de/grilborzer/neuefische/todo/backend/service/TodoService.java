@@ -21,4 +21,7 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
+    public void deleteTodo(String todoId) {
+        todoRepository.deleteById(todoId);
+    }
 }
