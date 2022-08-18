@@ -33,7 +33,7 @@ public class TodoServiceTest {
         when(todoRepository.save(firstTodo)).thenReturn(firstTodo);
 
         // When
-        String savedId = todoService.saveTodo(firstTodo);
+        String savedId = todoService.createTodo(firstTodo);
 
         // Then
         assertThat(savedId).isEqualTo(expectedId);
@@ -49,7 +49,7 @@ public class TodoServiceTest {
         when(todoRepository.save(firstTodo)).thenReturn(firstTodo);
 
         // When
-        String savedId = todoService.saveTodo(firstTodo);
+        String savedId = todoService.createTodo(firstTodo);
 
         // Then
         assertThat(savedId).isEqualTo(expectedId);

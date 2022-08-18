@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/v1/todos")
@@ -15,23 +16,27 @@ public class TodoController {
 
     private final TodoService todoService;
 
+    @GetMapping(value = {"/{todoId}"})
+    public Optional<Todo> getTodo(@PathVariable String todoId) {
+        return todoService.getTodo(todoId);
+    }
+
     @GetMapping
     public List<Todo> getAllTodos() {
         return todoService.getAllTodos();
     }
 
-    // Should we have separate methods to create and update entities? A tough choice for sure!
-    // I'm going for a uniform save method since this use case is rather ordinary and
-    // hasn't specified any constraints in controller response.
-    // There's also no tangible benefit in splitting the two.
-    //
-    // We do "sacrifice" not having a proper PUT verb, but we'll accept that for now.
     @PostMapping
     public String saveTodo(@RequestBody Todo todo) {
-        return todoService.saveTodo(todo);
+        return todoService.createTodo(todo);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PutMapping(value = "/{todoId}")
+    public void updateTodo(@PathVariable String todoId, @RequestBody Todo updatedTodo) {
+        todoService.updateTodo(todoId, updatedTodo);
+    }
+
+    @DeleteMapping(value = "/{todoId}")
     public ResponseEntity.BodyBuilder deleteTodo(@PathVariable String todoId) {
         todoService.deleteTodo(todoId);
         return ResponseEntity.ok();
