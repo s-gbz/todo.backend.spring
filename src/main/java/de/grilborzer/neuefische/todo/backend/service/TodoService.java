@@ -19,7 +19,7 @@ public class TodoService {
         return todoRepository.save(todo).getId();
     }
 
-    public void updateTodo(String todoId, Todo todo) {
+    public void updateTodo(String todoId, Todo todo) throws TodoNotFoundException {
         var optionalTodo = todoRepository.findById(todoId);
 
         if(optionalTodo.isPresent()) {
@@ -29,7 +29,7 @@ public class TodoService {
         }
     }
 
-    public Todo getTodo(String todoId) {
+    public Todo getTodo(String todoId) throws TodoNotFoundException  {
         return todoRepository.findById(todoId).orElseThrow(() -> new TodoNotFoundException(todoId));
     }
 
