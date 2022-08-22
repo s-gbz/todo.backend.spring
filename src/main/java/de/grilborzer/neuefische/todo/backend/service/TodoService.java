@@ -1,5 +1,6 @@
 package de.grilborzer.neuefische.todo.backend.service;
 
+import de.grilborzer.neuefische.todo.backend.exception.TodoNotFoundException;
 import de.grilborzer.neuefische.todo.backend.persistence.Todo;
 import de.grilborzer.neuefische.todo.backend.persistence.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,12 @@ public class TodoService {
         if(optionalTodo.isPresent()) {
             todoRepository.save(todo);
         } else {
-            throw new RuntimeException("Todo with ID " + todo + " does not exist!");
+            throw new TodoNotFoundException(todoId);
         }
     }
 
-    public Optional<Todo> getTodo(String todoId) {
-        return todoRepository.findById(todoId);
+    public Todo getTodo(String todoId) {
+        return todoRepository.findById(todoId).orElseThrow(() -> new TodoNotFoundException(todoId));
     }
 
     public List<Todo> getAllTodos() {

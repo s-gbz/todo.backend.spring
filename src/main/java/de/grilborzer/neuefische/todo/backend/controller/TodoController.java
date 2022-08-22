@@ -3,11 +3,9 @@ package de.grilborzer.neuefische.todo.backend.controller;
 import de.grilborzer.neuefische.todo.backend.persistence.Todo;
 import de.grilborzer.neuefische.todo.backend.service.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/v1/todos")
@@ -17,7 +15,7 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping(value = {"/{todoId}"})
-    public Optional<Todo> getTodo(@PathVariable String todoId) {
+    public Todo getTodo(@PathVariable String todoId) {
         return todoService.getTodo(todoId);
     }
 
