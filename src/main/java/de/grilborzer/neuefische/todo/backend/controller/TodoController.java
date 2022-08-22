@@ -21,19 +21,8 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping(value = {"/{todoId}"})
-    public ResponseEntity getTodo(@PathVariable String todoId) {
-        try {
-            Todo todo = todoService.getTodo(todoId);
-
-            return new ResponseEntity<>(todo, HttpStatus.OK);
-        } catch (TodoNotFoundException exception) {
-            Map<String, Object> responseBody = new LinkedHashMap<>();
-
-            responseBody.put("timestamp", LocalDateTime.now());
-            responseBody.put("message", exception.getMessage());
-
-            return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
-        }
+    public Todo getTodo(@PathVariable String todoId) {
+        return todoService.getTodo(todoId);
     }
 
     @GetMapping
