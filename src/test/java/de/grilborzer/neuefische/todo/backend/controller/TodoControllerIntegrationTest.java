@@ -1,5 +1,6 @@
 package de.grilborzer.neuefische.todo.backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.grilborzer.neuefische.todo.backend.exception.TodoNotFoundException;
 import de.grilborzer.neuefische.todo.backend.persistence.Todo;
 import de.grilborzer.neuefische.todo.backend.persistence.TodoRepository;
@@ -12,15 +13,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@ExtendWith
 @WebMvcTest
 public class TodoControllerIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private TodoRepository todoRepository;
@@ -54,5 +64,13 @@ public class TodoControllerIntegrationTest {
     @Test
     public void getTodoShouldThrowTodoNotFoundExceptionIfIdDoesntMatch() {
         assertThrows(TodoNotFoundException.class, () -> todoService.getTodo("Invalid ID!"));
+    }
+
+    @Test
+    void getTodoShouldReturn404IfIdDoesntMatch() throws Exception {
+        mockMvc.perform(get("/v1/todos/xyz")
+                        .contentType("application/json"))
+                .andExpect(status().isNotFound());
+
     }
 }
