@@ -13,7 +13,7 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = TodoNotFoundException.class)
+    @ExceptionHandler(TodoNotFoundException.class)
     public ResponseEntity handleTodoNotFoundException(TodoNotFoundException exception) {
         Map<String, Object> responseBody = new LinkedHashMap<>();
 
@@ -21,10 +21,10 @@ public class GlobalExceptionHandler {
         responseBody.put("message", exception.getMessage());
         responseBody.put("exceptionType", "TodoNotFoundException");
 
-        return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity handleRuntimeException(RuntimeException exception) {
         Map<String, Object> responseBody = new LinkedHashMap<>();
 
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
         responseBody.put("message", exception.getMessage());
         responseBody.put("exceptionType", "RuntimeException");
 
-        return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
     }
 
 }
